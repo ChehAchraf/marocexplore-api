@@ -36,5 +36,23 @@ class ItineraryController extends Controller
         }
     }
 
-    
+    // show all the itineraries
+    public function listAllItineraries(){
+        $allItineraries = itinerary::with('user','destinations')->get();
+        return $allItineraries;
+    }
+
+    // delete an itinerary
+    public function destroy($id){
+        $delete = itinerary::destroy($id);
+        if($delete){
+            return response()->json([
+                'messages'  =>  "the itinerary was deleted successfully !"
+            ] , 200);
+        }else{
+            return response()->json([
+                'messages'  =>  "There must be an error, couldn't delete itinerary, or its already deleted"
+            ] , 500);
+        }
+    }
 }
