@@ -32,4 +32,19 @@ class DestinationController extends Controller
             ] , 500);
         }
     }
+
+    // delete destination
+    public function destroy($id){
+        $deleteDestination = destination::destroy($id);
+        // check if the doelet has been done
+        if($deleteDestination){
+            return response()->json([
+                'message'   =>  'The destination has been deleted successfully !'
+            ], 200);
+        }else{
+            return response()->json([
+                'message'   =>  'There must be an error deleting destination, or it could be already deleted'
+            ], 500);
+        }
+    }
 }

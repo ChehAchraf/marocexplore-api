@@ -25,6 +25,7 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::post('/itinerary/add' , [ItineraryController::class , 'store'])->name('create.itinerary');
     Route::post('/itinerary/delete/{id}' , [ItineraryController::class , 'destroy'])->name('create.itinerary');
     Route::post('/destination/add/{id}' , [DestinationController::class , 'store'])->name('create.destination');
+    Route::post('/destination/delete/{id}',[DestinationController::class , 'destroy'])->name('destination.delete');
 });
 Route::post('/register', [AuthControloler::class, 'register'])->name('register');
 
