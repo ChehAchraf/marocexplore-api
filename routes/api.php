@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthControloler;
+use App\Http\Controllers\ItineraryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +16,11 @@ use App\Http\Controllers\AuthControloler;
 |
 */
 // get the user information
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+    Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+        return $request->user();
+    });
 // the protected routes asat 😎
 Route::group(['middleware'=>['auth:sanctum']], function(){
-
+    Route::post('/itinerary/add' , [ItineraryController::class , 'store'])->name('create.itinerary');
 });
 Route::post('/register', [AuthControloler::class, 'register'])->name('register');
