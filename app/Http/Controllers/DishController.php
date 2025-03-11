@@ -14,7 +14,7 @@ class DishController extends Controller
         $createDish = dish::create([
             'destination_id'    =>  $id,
             'name'              =>  $request->name,
-            'description'       =>  $request->destination
+            'description'       =>  $request->description
         ]);
         // check if the dish is created
         if($createDish){
@@ -26,6 +26,26 @@ class DishController extends Controller
                 "message"    =>  "There was an error creating dish, please try again"
             ] , 500);
         }
+    }
+
+    // show all the dishes
+    public function showAllDishes(){
+        $allDishes = dish::all();
+        return $allDishes;
+    }
+
+    // update dishes
+    public function update(Request $request , $id){
+        $dish = dish::findOrFail($id);
+        // validate the data
+        $valideData = $request->validate([
+            'name'          => 'string|min:3',
+            'description'   =>  'string'
+        ]);
+        $dish->update($valideData);
+        return response()->json([
+            'message'   =>  "the dish has been updated"
+        ]);
     }
 
     // delete the dish
