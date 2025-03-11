@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthControloler;
 use App\Http\Controllers\ItineraryController;
 use App\Http\Controllers\DestinationController;
-
+use App\Http\Controllers\DishController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -25,7 +25,10 @@ Route::group(['middleware'=>['auth:sanctum']], function(){
     Route::post('/itinerary/add' , [ItineraryController::class , 'store'])->name('create.itinerary');
     Route::post('/itinerary/delete/{id}' , [ItineraryController::class , 'destroy'])->name('create.itinerary');
     Route::post('/destination/add/{id}' , [DestinationController::class , 'store'])->name('create.destination');
+    Route::post('/destination/show}' , [DestinationController::class , 'store'])->name('create.destination');
     Route::post('/destination/delete/{id}',[DestinationController::class , 'destroy'])->name('destination.delete');
+    Route::post('/dish/add/{id}' , [DishController::class , 'store'])->name('add.dish');
+    Route::post('/dish/delete/{id}' , [DishController::class , 'destroy'])->name('delete.dish');
 });
 Route::post('/register', [AuthControloler::class, 'register'])->name('register');
 

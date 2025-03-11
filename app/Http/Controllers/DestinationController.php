@@ -33,6 +33,10 @@ class DestinationController extends Controller
         }
     }
 
+    // list all the destination
+    public function listDestinations(){
+        return destination::all();
+    }
     // delete destination
     public function destroy($id){
         $deleteDestination = destination::destroy($id);
