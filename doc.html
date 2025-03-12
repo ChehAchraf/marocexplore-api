@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MarocExplore API Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1E40AF',
+                        secondary: '#1D4ED8',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .endpoint-card {
+            transition: transform 0.2s;
+        }
+        .endpoint-card:hover {
+            transform: translateY(-2px);
+        }
+        .copy-button:hover {
+            opacity: 0.8;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        html {
+            scroll-padding-top: 100px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <!-- Navigation -->
+    <nav class="fixed w-full bg-white dark:bg-gray-800 shadow-md z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <img src="https://raw.githubusercontent.com/ChehAchraf/marocexplore-api/main/public/logo.png" alt="MarocExplore Logo" class="h-10 w-auto">
+                    <span class="text-xl font-bold text-gray-800 dark:text-white">MarocExplore API</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="relative">
+                        <input type="text" id="searchInput" placeholder="Search endpoints..." 
+                               class="w-64 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700">
+                        <i class="fas fa-moon dark:text-white"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sidebar Navigation -->
+    <div class="fixed left-0 top-16 h-full w-64 bg-white dark:bg-gray-800 shadow-lg overflow-y-auto hidden lg:block">
+        <div class="p-4">
+            <h3 class="text-lg font-semibold mb-4 dark:text-white">Quick Navigation</h3>
+            <ul class="space-y-2">
+                <li><a href="#getting-started" class="text-blue-600 dark:text-blue-400 hover:underline">Getting Started</a></li>
+                <li><a href="#authentication" class="text-blue-600 dark:text-blue-400 hover:underline">Authentication</a></li>
+                <li><a href="#itineraries" class="text-blue-600 dark:text-blue-400 hover:underline">Itineraries</a></li>
+                <li><a href="#destinations" class="text-blue-600 dark:text-blue-400 hover:underline">Destinations</a></li>
+                <li><a href="#activities" class="text-blue-600 dark:text-blue-400 hover:underline">Activities</a></li>
+                <li><a href="#dishes" class="text-blue-600 dark:text-blue-400 hover:underline">Dishes</a></li>
+                <li><a href="#wishlist" class="text-blue-600 dark:text-blue-400 hover:underline">Wishlist</a></li>
+                <li><a href="#reviews" class="text-blue-600 dark:text-blue-400 hover:underline">Reviews</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-700 to-blue-900 text-white pt-24 pb-16">
+        <div class="container mx-auto px-4 lg:pl-72">
+            <h1 class="text-5xl font-bold mb-6">MarocExplore API</h1>
+            <p class="text-xl opacity-90 mb-8">Discover Morocco's Rich Culture, Destinations, and Experiences</p>
+            <div class="flex space-x-4">
+                <a href="#getting-started" class="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-opacity-90 transition-colors">
+                    Get Started
+                </a>
+                <a href="https://github.com/ChehAchraf/marocexplore-api" target="_blank" class="bg-transparent border-2 border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700 transition-colors">
+                    View on GitHub
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 lg:pl-72">
+        <!-- Getting Started -->
+        <section id="getting-started" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white">Getting Started</h2>
+            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold mb-4 text-gray-800 dark:text-white">Base URL</h3>
+                <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex justify-between items-center">
+                    <code class="text-sm dark:text-white">https://api.marocexplore.com/api</code>
+                    <button class="copy-button px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors">
+                        Copy
+                    </button>
+                </div>
+                
+                <h3 class="text-xl font-semibold mt-8 mb-4 text-gray-800 dark:text-white">Authentication</h3>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">
+                    All API requests must include a Bearer token in the Authorization header:
+                </p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                    <code class="text-sm dark:text-white">
+                        Authorization: Bearer your_access_token_here
+                    </code>
+                </div>
+            </div>
+        </section>
+
+        <!-- Authentication -->
+        <section id="authentication" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white flex items-center">
+                <i class="fas fa-lock mr-4 text-blue-600"></i>Authentication
+            </h2>
+            <div class="grid gap-8">
+                <!-- Register -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Register</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-green-600 dark:text-green-400">POST</span> /register
+                        </code>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Request Body</h4>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <pre class="text-sm dark:text-white">{
+    "name": "string",
+    "email": "string",
+    "password": "string",
+    "password_confirmation": "string"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Login -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Login</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-green-600 dark:text-green-400">POST</span> /login
+                        </code>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Request Body</h4>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <pre class="text-sm dark:text-white">{
+    "email": "string",
+    "password": "string"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logout -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Logout</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-green-600 dark:text-green-400">POST</span> /logout
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Itineraries -->
+        <section id="itineraries" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white flex items-center">
+                <i class="fas fa-route mr-4 text-blue-600"></i>Itineraries
+            </h2>
+            <div class="grid gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">List All Itineraries</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-blue-600 dark:text-blue-400">GET</span> /itinerary/all
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Create Itinerary</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-green-600 dark:text-green-400">POST</span> /itinerary/add
+                        </code>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Request Body</h4>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <pre class="text-sm dark:text-white">{
+                                "title": "string",
+                                "duration": "number",
+                                "image": "string"
+                            }</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Update Itinerary</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-yellow-600 dark:text-yellow-400">PATCH</span> /itinerary/update/{id}
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Delete Itinerary</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-red-600 dark:text-red-400">DELETE</span> /itinerary/delete/{id}
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Other sections follow the same pattern -->
+        <section id="destinations" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white flex items-center">
+                <i class="fas fa-map-marker-alt mr-4 text-blue-600"></i>Destinations
+            </h2>
+            <div class="grid gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">List All destinations</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-blue-600 dark:text-blue-400">GET</span> /destination/show
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Create destination</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-green-600 dark:text-green-400">POST</span> /destination/add/{itinerary_id}
+                        </code>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Request Body</h4>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <pre class="text-sm dark:text-white">{
+                                "name": "string",
+                                "location": "string",
+                                "accommodation": "string"
+                            }</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Update destination</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-yellow-600 dark:text-yellow-400">PATCH</span> /destination/update/{id}
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Delete Itinerdestinationary</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-red-600 dark:text-red-400">DELETE</span> /destination/delete/{destination_id}
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="activities" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white flex items-center">
+                <i class="fas fa-hiking mr-4 text-blue-600"></i>Activities
+            </h2>
+            <div class="grid gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">List All activity</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-blue-600 dark:text-blue-400">GET</span> /activity/show
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Create activity</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-green-600 dark:text-green-400">POST</span> /destination/add/{destination_id}
+                        </code>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Request Body</h4>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <pre class="text-sm dark:text-white">{
+                                "name": "string",
+                                "description": "string",
+                            }</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Update destinaactivitytion</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-yellow-600 dark:text-yellow-400">PATCH</span> /activity/update/{id}
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Delete activity</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-red-600 dark:text-red-400">DELETE</span> /activity/{id}
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dishes" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white flex items-center">
+                <i class="fas fa-utensils mr-4 text-blue-600"></i>Dishes
+            </h2>
+                        </h2>
+            <div class="grid gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">List All dishes</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-blue-600 dark:text-blue-400">GET</span> /dish/all
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Create a dish</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-green-600 dark:text-green-400">POST</span> /dish/add/{destination_id}
+                        </code>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Request Body</h4>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <pre class="text-sm dark:text-white">{
+                                "name": "string",
+                                "description": "number"
+                            }</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Update dish</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-yellow-600 dark:text-yellow-400">PATCH</span> /dish/update/{id}
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Delete dish</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-red-600 dark:text-red-400">DELETE</span> /dish/delete/{id}
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wishlist" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white flex items-center">
+                <i class="fas fa-heart mr-4 text-blue-600"></i>Wishlist
+            </h2>
+            <div class="grid gap-8">
+                
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">add a itinerary to  wishlist</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-green-600 dark:text-green-400">POST</span> wishlist/itinerary/{itinerary_id}
+                        </code>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Request Body</h4>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+                            <pre class="text-sm dark:text-white">
+No need to send anything, everything will handled later, which means when the user is logged in 
+the app will take his id, and for the itinirary id, you must pass it through the url as a parametre
+                        </pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">remove the Itinerary from the wishlist</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-yellow-600 dark:text-yellow-400">DELETE</span> /wishlist/itinerary/{itinerary_id}
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="reviews" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-gray-800 dark:text-white flex items-center">
+                <i class="fas fa-star mr-4 text-blue-600"></i>Reviews
+            </h2>
+            <div class="grid gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">List All Itineraries</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-blue-600 dark:text-blue-400">GET</span> /itinerary/all
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Create review</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-green-600 dark:text-green-400">POST</span> /review/itinerary/{itinerary_id}
+                        </code>
+                    </div>
+                    <div class="mt-4">
+                        <h4 class="font-semibold mb-2 text-gray-700 dark:text-gray-300">Request Body</h4>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg">
+<pre class="text-sm dark:text-white">{
+"rating": "integer",
+}</pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Update review</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-yellow-600 dark:text-yellow-400">PATCH</span> /itinerary/update/{id}
+                        </code>
+                    </div>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md endpoint-card">
+                    <h3 class="text-xl font-semibold mb-4 text-blue-700 dark:text-blue-400">Delete Itinerary</h3>
+                    <div class="bg-gray-100 dark:bg-gray-700 px-4 py-2 rounded-lg inline-block">
+                        <code class="text-sm dark:text-white">
+                            <span class="text-red-600 dark:text-red-400">DELETE</span> /itinerary/delete/{id}
+                        </code>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4 lg:pl-72">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">MarocExplore API</h3>
+                    <p class="text-gray-400">Discover Morocco's rich cultural heritage, amazing destinations, and unique experiences through our comprehensive API.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#getting-started" class="text-gray-400 hover:text-white">Getting Started</a></li>
+                        <li><a href="#authentication" class="text-gray-400 hover:text-white">Authentication</a></li>
+                        <li><a href="https://github.com/ChehAchraf/marocexplore-api" class="text-gray-400 hover:text-white">GitHub</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-semibold mb-4">Contact</h3>
+                    <ul class="space-y-2">
+                        <li class="text-gray-400">Email: support@marocexplore.com</li>
+                        <li class="text-gray-400">GitHub: @ChehAchraf</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700 text-center">
+                <p>&copy; 2025 MarocExplore API. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const html = document.documentElement;
+        
+        darkModeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+            darkModeToggle.innerHTML = isDark ? '<i class="fas fa-sun text-white"></i>' : '<i class="fas fa-moon"></i>';
+        });
+
+        // Check for saved dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            html.classList.add('dark');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun text-white"></i>';
+        }
+
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const endpoints = document.querySelectorAll('.endpoint-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            endpoints.forEach(endpoint => {
+                const text = endpoint.textContent.toLowerCase();
+                endpoint.style.display = text.includes(searchTerm) ? 'block' : 'none';
+            });
+        });
+
+        // Copy to clipboard functionality
+        document.querySelectorAll('.copy-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const code = button.parentElement.querySelector('code').textContent;
+                navigator.clipboard.writeText(code);
+                
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            });
+        });
+
+        // Smooth scrolling using native browser behavior
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

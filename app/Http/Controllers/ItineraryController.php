@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\itinerary;
 use http\Client\Curl\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ItineraryController extends Controller
 {
@@ -15,7 +16,7 @@ class ItineraryController extends Controller
             'title'     =>      'required|string|min:6',
             'duration'  =>      'numeric|required',
             'image'     =>      'required',
-//            'user_id'   =>      'numeric'
+
         ]);
         // create the itinerary 👍
         $createItinerary =  itinerary::create([
@@ -38,7 +39,13 @@ class ItineraryController extends Controller
 
     // show all the itineraries
     public function listAllItineraries(){
-        $allItineraries = itinerary::with('user','destinations')->get();
+        // $allItineraries = itinerary::with('user','destinations')->get();
+        $allItineraries = DB::table('itineraries')
+                                    ->join('users','users.id','=','itineraries.user_id')
+                                    ->join('destinations','itineraries.id','=','destinations.itinerary_id')
+                                    ->join('reviews',"itineraries.id","=","reviews.itinerary_id")
+                                    ->join('')
+                                    ->get();
         return $allItineraries;
     }
 
